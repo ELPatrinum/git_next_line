@@ -5,117 +5,97 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/12 20:47:30 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/13 05:44:45 by muel-bak         ###   ########.fr       */
+/*   Created: 2023/11/13 15:07:26 by muel-bak          #+#    #+#             */
+/*   Updated: 2023/11/13 15:44:29 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "get_next_line.h"
 
-int	find_newline(t_list *line_list)
+char	*ft_strchr(const char *s, int c)
 {
 	int	i;
 
-	if (line_list == NULL)
-		return (0);
-	while (line_list)
+	i = 0;
+	while (s[i])
 	{
-		i = 0;
-		while (line_list->content[i])
-		{
-			if (line_list->content[i] == '\n')
-				return (1);
-			i++;
-		}
-		line_list = line_list->next;
+		if (s[i] == (char)c)
+			return ((char *)&s[i]);
+		i++;
 	}
-	return (0);
+	if (s[i] == (char)c)
+		return ((char *)&s[i]);
+	return (NULL);
 }
 
-t_list *find_last(t_list *line_list)
+char	*update_remainder(const char *new_line, char *old_remainder)
 {
-	if (line_list == NULL)
+	int		i;
+	int		len;
+	char	*res;
+
+	i = 0;
+	len = ft_strlen(new_line);
+	res = malloc(sizeof(char) * (len + 1));
+	if (!res)
 		return (NULL);
-	while (line_list->next)
+	while (i < len)
 	{
-		line_list = line_list->next;
+		res[i] = new_line[i];
+		i++;
 	}
-	return (line_list);
+	if (old_remainder)
+		free(old_remainder);
+	res[i] = '\0';
+	return (res);
 }
 
-void	make_line(t_list *line_list, char *str)
+void	ft_cpy(char *res, char *s1, const char *s2)
 {
 	int	i;
 	int	j;
-	
-	if (line_list == NULL)
-		return ;
+
 	i = 0;
-	while (line_list)
+	j = 0;
+	while (s1[i])
 	{
-		j = 0;
-		while (line_list->content[j] != '\0')
-		{
-			if (line_list->content[j] == '\n')
-				{
-					str[i] = '\n';
-					i++;
-					str[i] = '\0';
-					return ;
-				}
-			str[i] = line_list->content[j];
-			i++;
-			j++;
-		}
-		line_list = line_list->next;
+		res[i] = s1[i];
+		i++;
 	}
-	str[i] = '\0';
+	while (s2[j])
+	{
+		res[i + j] = s2[j];
+		j++;
+	}
+	res[i + j] = '\0';
+	free(s1);
 }
 
-int	line_len(t_list *line_list)
+char	*ft_join(char *s1, char const *s2)
 {
-	int	i;
-	int	len;
+	char	*res;
 
-	len = 0;
-	while (line_list)
-	{
-		i = 0;
-		while (line_list->content[i])
-		{
-			if (line_list->content[i] == '\n')
-				{
-					len++;
-					return (len);
-				}
-			len++;
-			i++;
-		}
-		line_list = line_list->next;
-	}
-	return (len);
+	if (!s1)
+		s1 = update_remainder("", s1);
+	if (!s1 || !s2)
+		return (NULL);
+	res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!res)
+		return (NULL);
+	ft_cpy(res, s1, s2);
+	return (res);
 }
 
-void	free_list(t_list **line_list, t_list *ready_element, char *str)
+char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {
-	t_list	*temp;
-	
-	if (line_list == NULL)
-		return ;
-	while (*line_list)
+	unsigned int	i;
+
+	i = 0;
+	while (src[i] && i < n)
 	{
-		temp = (*line_list)->next;
-		free((*line_list)->content);
-		free((*line_list));
-		*line_list = temp;
+		dest[i] = src[i];
+		++i;
 	}
-	if (ready_element->content[0])
-		*line_list = ready_element;
-	else
-	{
-		free(ready_element);
-		free (str);
-	}
-	
+	dest[i] = '\0';
+	return (dest);
 }

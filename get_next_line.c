@@ -5,99 +5,74 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 05:14:55 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/13 05:47:48 by muel-bak         ###   ########.fr       */
+/*   Created: 2023/11/13 15:00:30 by muel-bak          #+#    #+#             */
+/*   Updated: 2023/11/13 16:41:59 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	clean_and_prepare(t_list *line_list)
+int	ft_strlen(const char *s)
 {
-	t_list	*last_element;
-	t_list	*ready_element;
-	int		i;
-	int		j;
-	char	*str;
+	int	size;
 
-	ready_element = malloc(sizeof(t_list));
-	str = malloc(sizeof(BUFFER_SIZE) + 1);
-	if (ready_element == NULL || str == NULL)
-		return ;
-	last_element = find_last(line_list);
-	i = 0;
-	while (last_element->content[i] && last_element->content[i] != '\n')
-			i++;
-	i++;
-	j = 0;
-	while (last_element->content[i])
-			str[j++] = last_element->content[i++];
-	str[j] = '\0';
-	ready_element->content = str;
-	ready_element->next = NULL;
-	free_list(&line_list, ready_element, str);
+	size = 0;
+	while (s[size])
+		size++;
+	return (size);
 }
-char	*get_the_line(t_list *line_list)
-{
-	int		len;
-	char	*str;
 
-	if (line_list == NULL)
+void	*helper2(t_data *data)
+{
+	data->line = malloc(data->newline - data->remainder + 1 + 1);
+	data->line[data->newline - data->remainder] = '\0';
+	if (!data->line)
 		return (NULL);
-	len = line_len(line_list);
-	str = malloc(sizeof(BUFFER_SIZE));
-	if (str == NULL)
+	ft_strncpy(data->line, data->remainder,
+		data->newline - data->remainder + 1);
+	data->remainder = update_remainder(data->newline + 1,
+			data->remainder);
+	if (!data->remainder)
 		return (NULL);
-	make_line(line_list, str);
-	return (str);
+	return (data->line);
 }
-void	link_it(t_list **line_list, char *buffer)
-{
-	t_list *last_element;
-	t_list *new_element;
 
-	last_element = find_last(*line_list);
-	new_element = malloc(sizeof(t_list));
-	if (new_element == NULL)
-		return;
-	if (last_element == NULL)
-		*line_list = new_element;
-	else
-	{
-		last_element->next = new_element;
-		new_element->content = buffer;
-		new_element->next = NULL;
-	}
-}
-void	make_the_list(t_list *line_list, int fd)
+char	*helper1(t_data *data, int fd)
 {
-	char	*buffer;
-	int		we_read;
-
-	buffer = malloc(sizeof(BUFFER_SIZE) + 1);
-	if (buffer == NULL)
-		return;
-	we_read = read(fd, buffer, BUFFER_SIZE);
-	if (!we_read)
+	data->bytes_read = read(fd, data->buffer, BUFFER_SIZE);
+	while (data->bytes_read >= 0)
 	{
-		free(buffer);
-		return;
+		data->buffer[data->bytes_read] = '\0';
+		data->remainder = ft_join(data->remainder, data->buffer);
+		if (!data->remainder)
+			return (NULL);
+		data->newline = ft_strchr(data->remainder, '\n');
+		if (data->newline)
+		{
+			if (!helper2(data))
+				return (NULL);
+			return (data->line);
+		}
+		else if (!data->bytes_read && !data->remainder[0])
+			break ;
+		else if (!data->bytes_read)
+		{
+			data->line = update_remainder(data->remainder, data->remainder);
+			data->remainder = NULL;
+			return (data->line);
+		}
+		data->bytes_read = read(fd, data->buffer, BUFFER_SIZE);
 	}
-	buffer[we_read] = '\0';
-	link_it(&line_list, buffer);
+	free(data->remainder);
+	data->remainder = NULL;
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
 {
-	static t_list	*line_list;
-	char			*theline;
+	static t_data	data;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || !read(fd, &make_the_list, 0))
+	if (!BUFFER_SIZE || fd == -1)
 		return (NULL);
-	make_the_list(line_list, fd);
-	if (line_list == NULL)
-		return (NULL);
-	theline = get_the_line(line_list);
-	clean_and_prepare(line_list);
-	return (theline);
+	return (helper1(&data, fd));
 }
