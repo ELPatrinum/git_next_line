@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 12:06:31 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/16 17:32:57 by muel-bak         ###   ########.fr       */
+/*   Created: 2023/11/16 17:07:35 by muel-bak          #+#    #+#             */
+/*   Updated: 2023/11/16 17:34:51 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*read_from_fd(int fd, char *remains)
 {
@@ -91,17 +91,17 @@ char	*update_remains(char *remains)
 
 char	*get_next_line(int fd)
 {
-	static char	*remains;
+	static char	*remains[1337];
 	char		*theline;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	remains = read_from_fd(fd, remains);
-	if (!remains)
+	remains[fd] = read_from_fd(fd, remains[fd]);
+	if (!remains[fd])
 		return (NULL);
-	theline = get_theline(remains);
+	theline = get_theline(remains[fd]);
 	if (!theline)
-		return (free(remains), remains = NULL, NULL);
-	remains = update_remains(remains);
+		return (free(remains[fd]), remains[fd] = NULL, NULL);
+	remains[fd] = update_remains(remains[fd]);
 	return (theline);
 }

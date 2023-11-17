@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 12:07:45 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/16 17:00:23 by muel-bak         ###   ########.fr       */
+/*   Created: 2023/11/16 17:08:19 by muel-bak          #+#    #+#             */
+/*   Updated: 2023/11/16 17:12:14 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	ft_strlen(char *str, int j, char c)
 {
