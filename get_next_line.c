@@ -6,7 +6,7 @@
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 12:06:31 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/16 17:32:57 by muel-bak         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:51:09 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,11 @@ char	*get_next_line(int fd)
 		return (NULL);
 	theline = get_theline(remains);
 	if (!theline)
-		return (free(remains), remains = NULL, NULL);
+	{
+		free(remains);
+		remains = NULL;
+		return (NULL);
+	}
 	remains = update_remains(remains);
 	return (theline);
 }
