@@ -6,7 +6,7 @@
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 17:07:35 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/17 22:26:13 by muel-bak         ###   ########.fr       */
+/*   Updated: 2023/11/18 10:40:57 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	*update_remains(char *remains)
 
 char	*get_next_line(int fd)
 {
-	static char	*remains[2147483647];
+	static char	*remains[OPEN_MAX];
 	char		*theline;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)

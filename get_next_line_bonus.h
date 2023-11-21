@@ -6,7 +6,7 @@
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 17:09:31 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/16 17:39:07 by muel-bak         ###   ########.fr       */
+/*   Updated: 2023/11/18 10:40:18 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <limits.h>
 
 char	*get_next_line(int fd);
 char	*get_remains(char *remains);

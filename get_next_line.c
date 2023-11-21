@@ -6,7 +6,7 @@
 /*   By: muel-bak <muel-bak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 12:06:31 by muel-bak          #+#    #+#             */
-/*   Updated: 2023/11/17 16:51:09 by muel-bak         ###   ########.fr       */
+/*   Updated: 2023/11/18 18:23:47 by muel-bak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*get_theline(char *str)
 	if (!line)
 		return (NULL);
 	i = 0;
-	while (str[i] && str[i] != '\n')
+	while (str[i] != '\0' && str[i] != '\n')
 	{
 		line[i] = str[i];
 		i++;
@@ -71,7 +71,7 @@ char	*update_remains(char *remains)
 	j = 0;
 	if (!remains)
 		return (free(remains), NULL);
-	while (remains[i] && remains[i] != '\n')
+	while (remains[i] != '\0' && remains[i] != '\n')
 		i++;
 	if (!remains[i])
 	{
